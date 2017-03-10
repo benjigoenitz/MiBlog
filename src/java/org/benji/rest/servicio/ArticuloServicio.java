@@ -1,6 +1,7 @@
 
 package org.benji.rest.servicio;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import org.benji.rest.dao.BaseDeDatos;
 import org.benji.rest.modelo.Articulo;
@@ -28,6 +29,7 @@ public class ArticuloServicio {
     
     public Articulo addArticulo(Articulo articulo){
         articulo.setId(getMaximo());
+        articulo.setCreado(new GregorianCalendar());
         listado.add(articulo);
         return articulo;
     }
