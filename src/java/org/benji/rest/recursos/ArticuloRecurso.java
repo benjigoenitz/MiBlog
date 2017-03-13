@@ -10,7 +10,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.benji.rest.modelo.Articulo;
 import org.benji.rest.servicio.ArticuloServicio;
 
@@ -26,7 +28,15 @@ public class ArticuloRecurso {
     ArticuloServicio servicio= new ArticuloServicio();
     
     @GET
-    public List<Articulo> getArticulos(){
+    public List<Articulo> getArticulos(@QueryParam("autor") String autor,
+                                       @QueryParam("year") int year,
+                                       @QueryParam("month") int month){
+        if(autor != null && autor.length() > 0){
+            return servicio.getArticulosByAutor(autor);
+        }
+        if(year > 0 && month > 0){
+            return servicio.getArticuloByDate(year, month);
+        }
         return servicio.getArticulos();
     }
     
@@ -52,5 +62,11 @@ public class ArticuloRecurso {
     public Articulo updateArticulo(@PathParam("articuloId") int id, Articulo articulo ){
         articulo.setId(id);
         return servicio.updateArticulo(articulo);
+    }
+    
+    
+    @Path("/{articuloId}/comentarios")
+    public ComentarioRecurso getComentarios(){
+        return new ComentarioRecurso();
     }
 }
