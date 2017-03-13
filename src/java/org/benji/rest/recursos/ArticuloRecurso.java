@@ -18,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import org.benji.rest.modelo.Articulo;
+import org.benji.rest.modelo.Navegacion;
 import org.benji.rest.servicio.ArticuloServicio;
 
 /**
@@ -46,8 +47,19 @@ public class ArticuloRecurso {
     
     @GET
     @Path("/{articuloId}")
-    public Articulo getArticulo(@PathParam("articuloId") int id){
-        return servicio.getArticulo(id);
+    public Articulo getArticulo(@PathParam("articuloId") int id,
+                                @Context UriInfo uriInfo){
+        Articulo respuesta = servicio.getArticulo(id);
+        
+        String linkSelf = uriInfo.getAbsolutePath().toString();
+        String linkComm = linkSelf + "/comentarios";
+        Navegacion self = new Navegacion("Recurso", linkSelf, "Locacion del recurso");
+        Navegacion comm = new Navegacion("Comentarios", linkComm,"Locacion de los comentarios");
+        
+        respuesta.getNavegacion().add(self);
+        respuesta.getNavegacion().add(comm);
+        
+        return respuesta;
     }
     
     @POST
