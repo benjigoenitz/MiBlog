@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import org.benji.rest.dao.BaseDeDatos;
+import org.benji.rest.excepciones.DatosNoencontradosExcepcion;
 import org.benji.rest.modelo.Articulo;
 
 /**
@@ -44,12 +45,16 @@ public class ArticuloServicio {
     }
 
     public Articulo getArticulo(int id) {
+        Articulo respuesta = null;
         for (Articulo articulo : listado) {
             if (articulo.getId() == id) {
-                return articulo;
+                respuesta = articulo;
             }
         }
-        return null;
+        if (respuesta == null){
+            throw new DatosNoencontradosExcepcion("No se encuentra el articulo");
+        }
+        return respuesta;
     }
 
     public Articulo addArticulo(Articulo articulo) {
